@@ -35,6 +35,12 @@ public class GeneratePotMojo extends AbstractMojo {
     @Parameter( property = "generatepot.defaultLang", defaultValue = "en" )
     private String defaultLang;
 
+    /**
+    * default gettext domain
+    */
+    @Parameter( property = "generatepot.defaultDomain", defaultValue = "default" )
+    private String defaultDomain;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         //check, if source directory exists
@@ -122,6 +128,14 @@ public class GeneratePotMojo extends AbstractMojo {
 
     protected void analyzeFile (File file) {
         getLog().info("analyze file: " + file.getAbsolutePath());
+
+        //dont analyze class I itself
+        if (file.getAbsolutePath().endsWith("I.java")) {
+            getLog().info("skip class I.java: " + file.getAbsolutePath());
+            return;
+        }
+
+        //search for string literals
     }
 
 }

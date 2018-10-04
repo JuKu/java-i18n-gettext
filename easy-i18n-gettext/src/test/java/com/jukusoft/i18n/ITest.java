@@ -15,12 +15,17 @@ public class ITest {
 
     @Test (expected = IllegalArgumentException.class)
     public void testInitNotExistentDir () {
-        I.init(new File("./test/"));
+        I.init(new File("../test/"));
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testInitFile () {
+        I.init(new File("../testdata/test.txt"));
     }
 
     @Test
     public void testInit () {
-        I.init(new File("./po/"));
+        I.init(new File("../testdata/po/"));
     }
 
     @Test

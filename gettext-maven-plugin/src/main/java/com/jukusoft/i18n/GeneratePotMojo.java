@@ -1,5 +1,6 @@
 package com.jukusoft.i18n;
 
+import com.jukusoft.i18n.utils.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -8,11 +9,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
-import java.util.MissingResourceException;
+import java.util.*;
 
 @Mojo( name = "generatepot", threadSafe = true )
 public class GeneratePotMojo extends AbstractMojo {
@@ -90,6 +91,8 @@ public class GeneratePotMojo extends AbstractMojo {
 
         getLog().info("generatepot source directory: " + new File(srcDir).getAbsolutePath());
 
+        Map<String,Set<String>> entriesMap = new HashMap<>();
+
         try {
             //Files.walk(Paths.get(srcDir));
                     //.filter(Files::isRegularFile);
@@ -98,7 +101,13 @@ public class GeneratePotMojo extends AbstractMojo {
             Files.find(Paths.get(srcDir),
                     Integer.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
-                    .forEach(this::analyzeFile);
+                    .forEach((path) -> {
+                        try {
+                            analyzeFile(path, defaultDomain, entriesMap);
+                        } catch (MojoFailureException e) {
+                            throw new IllegalStateException("Error while analyzing file '" + path.toFile().getAbsolutePath() + "'!");
+                        }
+                    });
         } catch (IOException e) {
             getLog().error("IOException while find files");
             getLog().error(e);
@@ -107,6 +116,12 @@ public class GeneratePotMojo extends AbstractMojo {
             getLog().error("Exception while find files");
             getLog().error(e);
             throw new MojoFailureException(e.getLocalizedMessage());
+        }
+
+        getLog().info("" + entriesMap.keySet().size() + " different domains found in files:");
+
+        for (String domain : entriesMap.keySet()) {
+            getLog().info("Domain: " + domain);
         }
 
         //parse source files
@@ -122,20 +137,8 @@ public class GeneratePotMojo extends AbstractMojo {
         }
     }
 
-    protected void analyzeFile (Path path) {
-        analyzeFile(path.toFile());
-    }
-
-    protected void analyzeFile (File file) {
-        getLog().info("analyze file: " + file.getAbsolutePath());
-
-        //dont analyze class I itself
-        if (file.getAbsolutePath().endsWith("I.java")) {
-            getLog().info("skip class I.java: " + file.getAbsolutePath());
-            return;
-        }
-
-        //search for string literals
+    protected void analyzeFile (Path path, String defaultDomain, Map<String,Set<String>> entriesMap) throws MojoFailureException {
+        FileAnalyzer.analyzeFile(path.toFile(), getLog(), defaultDomain, entriesMap);
     }
 
 }

@@ -102,4 +102,18 @@ public class I {
         return (n > 1 ? msgIdPlural : msgId);
     }
 
+    /**
+     * translate message with use of singular / plural (if n  &lt;= 1, singular is used, else plural is used)
+     *
+     * @param domainName domain name
+     * @param msgId english message in singular to translate
+     * @param msgIdPlural english message in plural to translate
+     * @param n number
+     *
+     * @return translated string
+     */
+    public static String ntr (String domainName, String msgId, String msgIdPlural, long n) {
+        return (n > 1 ? msgIdPlural : msgId);
+    }
+
 }

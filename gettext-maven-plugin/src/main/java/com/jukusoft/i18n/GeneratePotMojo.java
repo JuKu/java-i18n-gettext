@@ -7,6 +7,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 @Mojo( name = "generatepot", threadSafe = true )
 public class GeneratePotMojo extends AbstractMojo {
@@ -14,7 +20,7 @@ public class GeneratePotMojo extends AbstractMojo {
     /**
     * source directory
     */
-    @Parameter( property = "generatepot.src", defaultValue = "src/" )
+    @Parameter( property = "generatepot.src", defaultValue = "${project.build.sourceDirectory}" )
     private String srcDir;
 
     /**
@@ -22,6 +28,12 @@ public class GeneratePotMojo extends AbstractMojo {
      */
     @Parameter( property = "generatepot.outputDir", defaultValue = "lang/" )
     private String outputDir;
+
+    /**
+    * default language token
+    */
+    @Parameter( property = "generatepot.defaultLang", defaultValue = "en" )
+    private String defaultLang;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -35,6 +47,10 @@ public class GeneratePotMojo extends AbstractMojo {
             throw new MojoFailureException("generatepot srcDir '" + new File(srcDir).getAbsolutePath() + "' isn't a directory!");
         }
 
+        if (!outputDir.endsWith("/")) {
+            throw new MojoFailureException("configuration outputDir has to end with '/'! Current value: '" + outputDir + "'.");
+        }
+
         //check, if output directory exists
         if (!new File(outputDir).exists()) {
             //create output directory
@@ -43,7 +59,69 @@ public class GeneratePotMojo extends AbstractMojo {
             new File(outputDir).mkdirs();
         }
 
+        //check, if language token is valide
+        if (!isValidLocale(new Locale(defaultLang))) {
+            throw new MojoFailureException("default language isn't a valide language token! Here you can check, if token is valide: http://schneegans.de/lv/");
+        }
+
+        String langDir = outputDir + defaultLang + "/";
+
+        //create language directory, if not exists
+        if (!new File(langDir).exists()) {
+            //create directory
+            new File(langDir).mkdirs();
+        }
+
+        if (!new File(langDir).isDirectory()) {
+            throw new MojoFailureException("langDir isn't a directory: " + new File(langDir).getAbsolutePath());
+        }
+
+        getLog().info("Analyze source directory '" + Paths.get(srcDir) + "' now...");
+
+        if (new File(srcDir).listFiles().length == 0) {
+            throw new MojoFailureException("source directory '" + new File(srcDir).getAbsolutePath() + "' is empty!");
+        }
+
+        getLog().info("generatepot source directory: " + new File(srcDir).getAbsolutePath());
+
+        try {
+            //Files.walk(Paths.get(srcDir));
+                    //.filter(Files::isRegularFile);
+                    //.forEach(System.out::println);
+
+            Files.find(Paths.get(srcDir),
+                    Integer.MAX_VALUE,
+                    (filePath, fileAttr) -> fileAttr.isRegularFile())
+                    .forEach(this::analyzeFile);
+        } catch (IOException e) {
+            getLog().error("IOException while find files");
+            getLog().error(e);
+            throw new MojoFailureException(e.getLocalizedMessage());
+        } catch (Exception e) {
+            getLog().error("Exception while find files");
+            getLog().error(e);
+            throw new MojoFailureException(e.getLocalizedMessage());
+        }
+
+        //parse source files
+
         System.out.println("hello!");
+    }
+
+    private boolean isValidLocale (Locale locale) {
+        try {
+            return locale.getISO3Language() != null && locale.getISO3Country() != null;
+        } catch (MissingResourceException e) {
+            return false;
+        }
+    }
+
+    protected void analyzeFile (Path path) {
+        analyzeFile(path.toFile());
+    }
+
+    protected void analyzeFile (File file) {
+        getLog().info("analyze file: " + file.getAbsolutePath());
     }
 
 }

@@ -5,8 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jukusoft</groupId>
-	<artifactId>easy-i18n-gettext</artifactId>
+	<artifactId>easy-i18n-gettext-parent</artifactId>
+	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
+	<modules>
+		<module>easy-i18n-gettext</module>
+	</modules>
 
 	<name>Easy i18n gettext library</name>
 	<description>A small library to use GNU gettext() functionalities in Java</description>
@@ -93,6 +97,13 @@
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- High Performance Primitive Collections for Java, https://github.com/carrotsearch/hppc -->
+		<dependency>
+			<groupId>com.carrotsearch</groupId>
+			<artifactId>hppc</artifactId>
+			<version>${hppc.version}</version>
 		</dependency>
 	</dependencies>
 

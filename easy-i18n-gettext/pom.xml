@@ -33,6 +33,23 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>com.jukusoft</groupId>
+				<artifactId>gettext-maven-plugin</artifactId>
+				<version>${project.version}</version>
+				<configuration>
+					<outputDir>lang/</outputDir>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>generatepot</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

@@ -80,7 +80,7 @@ public class I {
     /**
      * Translate a literal message  to the user's current language.
      *
-     *
+     * @param domainName domain name (filename without extension)
      * @param msgId english-language message (also the default message, if there was no translation found)
      *
      * @return translated message or msg, if no translation was found
@@ -90,9 +90,13 @@ public class I {
     }
 
     /**
-    * translate message with use of singular / plural
+    * translate message with use of singular / plural (if n  &lt;= 1, singular is used, else plural is used)
      *
-     * @param n number, if n <= 1, singular is used, else plural is used
+     * @param msgId english message in singular to translate
+     * @param msgIdPlural english message in plural to translate
+     * @param n number
+     *
+     * @return translated string
     */
     public static String ntr (String msgId, String msgIdPlural, long n) {
         return (n > 1 ? msgIdPlural : msgId);

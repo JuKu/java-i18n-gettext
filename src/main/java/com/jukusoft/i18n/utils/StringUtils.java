@@ -8,11 +8,11 @@ public class StringUtils {
         //
     }
 
-    public static void requireNotEmpty (String str) {
+    public static final void requireNotEmpty (String str) {
         requireNotEmpty(str, "string");
     }
 
-    public static void requireNotEmpty (String str, String name) {
+    public static final void requireNotEmpty (String str, String name) {
         Objects.requireNonNull(str);
 
         if (str.isEmpty()) {

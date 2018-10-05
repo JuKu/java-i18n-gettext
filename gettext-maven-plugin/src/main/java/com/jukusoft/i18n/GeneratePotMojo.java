@@ -120,13 +120,22 @@ public class GeneratePotMojo extends AbstractMojo {
 
         getLog().info("" + entriesMap.keySet().size() + " different domains found in files:");
 
-        for (String domain : entriesMap.keySet()) {
+        for (Map.Entry<String, Set<String>> entry : entriesMap.entrySet()) {
+            String domain = entry.getKey();
             getLog().info("Domain: " + domain);
+
+            for (String msgId : entry.getValue()) {
+                getLog().info("msgId: " + msgId);
+            }
         }
 
         //parse source files
 
         System.out.println("hello!");
+    }
+
+    protected void saveDomain (String domain, Set<String> keys) {
+        //
     }
 
     private boolean isValidLocale (Locale locale) {

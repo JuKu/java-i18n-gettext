@@ -24,6 +24,7 @@ script:
 #  - mvn clean install
   - mvn -e clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.login=${SONAR_TOKEN}
 #  - mvn cobertura:cobertura
+  - curl -X POST https://api.poeditor.com/v2/projects/upload -F api_token="${POEDITOR_API_TOKEN}" -F id="214535" -F updating="terms" -F language="en" -F file=@"lang/messages.pot"
 
 notifications:
 email: false

@@ -1,6 +1,5 @@
 package com.jukusoft.i18n;
 
-import com.jukusoft.i18n.utils.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -9,11 +8,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Mojo( name = "generatepot", threadSafe = true )
 public class GeneratePotMojo extends AbstractMojo {
@@ -91,13 +90,10 @@ public class GeneratePotMojo extends AbstractMojo {
 
         getLog().info("generatepot source directory: " + new File(srcDir).getAbsolutePath());
 
-        Map<String,Set<String>> entriesMap = new HashMap<>();
+        Map<String,List<PotEntry>> entriesMap = new HashMap<>();
 
         try {
-            //Files.walk(Paths.get(srcDir));
-                    //.filter(Files::isRegularFile);
-                    //.forEach(System.out::println);
-
+            //parse source files
             Files.find(Paths.get(srcDir),
                     Integer.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
@@ -120,21 +116,24 @@ public class GeneratePotMojo extends AbstractMojo {
 
         getLog().info("" + entriesMap.keySet().size() + " different domains found in files:");
 
-        for (Map.Entry<String, Set<String>> entry : entriesMap.entrySet()) {
+        for (Map.Entry<String, List<PotEntry>> entry : entriesMap.entrySet()) {
             String domain = entry.getKey();
             getLog().info("Domain: " + domain);
 
-            for (String msgId : entry.getValue()) {
-                getLog().info("msgId: " + msgId);
+            for (PotEntry potEntry : entry.getValue()) {
+                getLog().info("msgId: " + potEntry.getMsgId());
+                getLog().info("pluralMsgId: " + potEntry.getPluralMsgId());
+
+                for (String fileLine : potEntry.listOccurrences()) {
+                    getLog().info("found in file " + fileLine);
+                }
             }
         }
 
-        //parse source files
-
-        System.out.println("hello!");
+        System.out.println("GeneratePotMojo: pot files created!");
     }
 
-    protected void saveDomain (String domain, Set<String> keys) {
+    protected void saveDomain (String domain, Set<PotEntry> entries) {
         //
     }
 
@@ -146,7 +145,7 @@ public class GeneratePotMojo extends AbstractMojo {
         }
     }
 
-    protected void analyzeFile (Path path, String defaultDomain, Map<String,Set<String>> entriesMap) throws MojoFailureException {
+    protected void analyzeFile (Path path, String defaultDomain, Map<String,List<PotEntry>> entriesMap) throws MojoFailureException {
         FileAnalyzer.analyzeFile(path.toFile(), getLog(), defaultDomain, entriesMap);
     }
 

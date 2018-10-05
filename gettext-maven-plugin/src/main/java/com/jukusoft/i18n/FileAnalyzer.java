@@ -15,7 +15,7 @@ public class FileAnalyzer {
             "tr", "ntr"
     };
     
-    public static void analyzeFile (File file, Log log, String defaultDomain, Map<String,Set<String>> entriesMap) throws MojoFailureException {
+    public static void analyzeFile (File file, Log log, String defaultDomain, Map<String,List<PotEntry>> entriesMap) throws MojoFailureException {
         log.info("analyze file: " + file.getAbsolutePath());
 
         //dont analyze class I itself
@@ -45,7 +45,11 @@ public class FileAnalyzer {
         //iterate through lines
         String[] lines = content.split(System.lineSeparator());
 
+        int lineNumber = 0;
+
         for (String line : lines) {
+            lineNumber++;
+
             if (line.contains("I.")) {
                 char c[] = line.toCharArray();
 
@@ -138,17 +142,28 @@ public class FileAnalyzer {
                     }
 
                     if (!entriesMap.containsKey(domainName)) {
-                        entriesMap.put(domainName, new HashSet<>());
+                        entriesMap.put(domainName, new ArrayList<>());
                     }
 
                     //get domain list
-                    Set<String> entries = entriesMap.get(domainName);
+                    List<PotEntry> entries = entriesMap.get(domainName);
 
-                    entries.add(msgId);
+                    PotEntry entry = new PotEntry(domainName, msgId, msgId1);
 
-                    if (msgId1 != null && !msgId1.isEmpty()) {
-                        entries.add(msgId1);
+                    if (entries.contains(entry)) {
+                        log.info("key " + domainName + "." + msgId + " already exists in map!");
+                        entry = entries.get(entries.indexOf(entry));
+                    } else {
+                        entries.add(entry);
                     }
+
+                    entry.addFile(file.getName(), lineNumber);
+
+                    //entries.add(msgId);
+
+                    /*if (msgId1 != null && !msgId1.isEmpty()) {
+                        entries.add(msgId1);
+                    }*/
                 } else {
                     //its another class, which ends with "I.", like "MyExampleClassI."
                     continue;
@@ -161,6 +176,8 @@ public class FileAnalyzer {
     }
 
     protected static boolean isAllowedMethod (String methodName) {
+        Objects.requireNonNull(methodName);
+
         for (String str : methodNames) {
             if (methodName.equals(str)) {
                 return true;

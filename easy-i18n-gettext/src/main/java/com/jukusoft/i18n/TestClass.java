@@ -7,6 +7,9 @@ public class TestClass {
 
     public void test () {
         I.tr("my-string");
+        I.tr("duplicate-string");
+        I.tr("duplicate-string");
+
         System.out.println(I.tr("my-domain", "my-string"));
 
         String str = I.ntr("sg1", "pl1", 2);

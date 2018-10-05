@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Mojo( name = "generatepot", threadSafe = true )
 public class GeneratePotMojo extends AbstractMojo {
@@ -40,6 +39,13 @@ public class GeneratePotMojo extends AbstractMojo {
     */
     @Parameter( property = "generatepot.defaultDomain", defaultValue = "default" )
     private String defaultDomain;
+
+    /**
+    * header information
+    */
+    @Parameter (property = "generatepot.header", required = true )
+    //@Parameter
+    private Map<String,String> header;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -114,11 +120,13 @@ public class GeneratePotMojo extends AbstractMojo {
             throw new MojoFailureException(e.getLocalizedMessage());
         }
 
+        getLog().info("header attributes: " + header.size());
+
         getLog().info("" + entriesMap.keySet().size() + " different domains found in files:");
 
         for (Map.Entry<String, List<PotEntry>> entry : entriesMap.entrySet()) {
             String domain = entry.getKey();
-            getLog().info("Domain: " + domain);
+            /*getLog().info("Domain: " + domain);
 
             for (PotEntry potEntry : entry.getValue()) {
                 getLog().info("msgId: " + potEntry.getMsgId());
@@ -127,7 +135,10 @@ public class GeneratePotMojo extends AbstractMojo {
                 for (String fileLine : potEntry.listOccurrences()) {
                     getLog().info("found in file " + fileLine);
                 }
-            }
+            }*/
+
+            //write .pot file
+            PotWriter.write(new File(outputDir + domain + ".pot"), getLog(), header, entry.getValue());
         }
 
         System.out.println("GeneratePotMojo: pot files created!");

@@ -41,6 +41,14 @@
 				<configuration>
 					<outputDir>lang/</outputDir>
 					<defaultDomain>messages</defaultDomain>
+
+					<header>
+						<title>My test project</title>
+						<copyright>Copyright (c) 2018 JuKuSoft.com</copyright>
+						<license>This file is distributed under the same license as the ${project.name} package.</license>
+						<author>JuKu my-mail@example.com, 2018.</author>
+						<version>${project.version}</version>
+					</header>
 				</configuration>
 				<executions>
 					<execution>

@@ -30,6 +30,10 @@ public class PotEntry {
         return pluralMsgId;
     }
 
+    public boolean hasPlural () {
+        return !getPluralMsgId().isEmpty();
+    }
+
     public void addFile (String file, int line) {
         this.filesLinesList.add(file + " line " + line);
     }

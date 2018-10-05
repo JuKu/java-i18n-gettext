@@ -9,8 +9,8 @@
 	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<modules>
-		<module>easy-i18n-gettext</module>
 		<module>gettext-maven-plugin</module>
+		<module>easy-i18n-gettext</module>
 	</modules>
 
 	<name>Easy i18n gettext library</name>

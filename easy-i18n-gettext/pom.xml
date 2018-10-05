@@ -49,6 +49,8 @@
 						<author>JuKu my-mail@example.com, 2018.</author>
 						<version>${project.version}</version>
 					</header>
+
+					<createCompletePot>true</createCompletePot>
 				</configuration>
 				<executions>
 					<execution>

@@ -47,6 +47,9 @@ public class GeneratePotMojo extends AbstractMojo {
     //@Parameter
     private Map<String,String> header;
 
+    @Parameter(property = "generatepot.createCompletePot", defaultValue = "false")
+    private boolean createCompletePotFile;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         //check, if source directory exists
@@ -103,7 +106,7 @@ public class GeneratePotMojo extends AbstractMojo {
             Files.find(Paths.get(srcDir),
                     Integer.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
-                    .forEach((path) -> {
+                    .forEach(path -> {
                         try {
                             analyzeFile(path, defaultDomain, entriesMap);
                         } catch (MojoFailureException e) {
@@ -124,28 +127,24 @@ public class GeneratePotMojo extends AbstractMojo {
 
         getLog().info("" + entriesMap.keySet().size() + " different domains found in files:");
 
+        Set<PotEntry> fullList = new HashSet<>();
+
         for (Map.Entry<String, List<PotEntry>> entry : entriesMap.entrySet()) {
             String domain = entry.getKey();
-            /*getLog().info("Domain: " + domain);
-
-            for (PotEntry potEntry : entry.getValue()) {
-                getLog().info("msgId: " + potEntry.getMsgId());
-                getLog().info("pluralMsgId: " + potEntry.getPluralMsgId());
-
-                for (String fileLine : potEntry.listOccurrences()) {
-                    getLog().info("found in file " + fileLine);
-                }
-            }*/
-
             //write .pot file
             PotWriter.write(new File(outputDir + domain + ".pot"), getLog(), header, entry.getValue());
+
+            if (createCompletePotFile) {
+                fullList.addAll(entry.getValue());
+            }
         }
 
-        System.out.println("GeneratePotMojo: pot files created!");
-    }
+        getLog().info("GeneratePotMojo: pot files created!");
 
-    protected void saveDomain (String domain, Set<PotEntry> entries) {
-        //
+        if (this.createCompletePotFile) {
+            getLog().info("create complete pot file with all strings now.");
+            PotWriter.write(new File(outputDir + "complete-list.pot"), getLog(), header, new ArrayList<>(fullList));
+        }
     }
 
     private boolean isValidLocale (Locale locale) {

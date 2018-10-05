@@ -23,15 +23,19 @@ public class PotWriter {
         }
 
         //delete file, if exists
-        if (file.exists()) {
-            file.delete();
+        if (file.exists() && !file.delete()) {
+            throw new MojoFailureException("Cannot delete pot file: " + file.getAbsolutePath());
         }
 
         try {
-            file.createNewFile();
+            if (!file.createNewFile()) {
+                throw new MojoFailureException("Cannot create .pot file: " + file.getAbsolutePath());
+            }
         } catch (IOException e) {
             log.error("Cannot create .pot file: " + file.getAbsolutePath());
             log.error(e);
+
+            throw new MojoFailureException("IOException while creating pot file: ", e);
         }
 
         //put default values

@@ -14,6 +14,10 @@ public class FileAnalyzer {
     protected static final String[] methodNames = new String[]{
             "tr", "ntr"
     };
+
+    protected FileAnalyzer () {
+        //
+    }
     
     public static void analyzeFile (File file, Log log, String defaultDomain, Map<String,List<PotEntry>> entriesMap) throws MojoFailureException {
         log.info("analyze file: " + file.getAbsolutePath());
@@ -51,7 +55,7 @@ public class FileAnalyzer {
             lineNumber++;
 
             if (line.contains("I.")) {
-                char c[] = line.toCharArray();
+                char[] c = line.toCharArray();
 
                 int pos = line.indexOf("I.");
 
@@ -158,12 +162,6 @@ public class FileAnalyzer {
                     }
 
                     entry.addFile(file.getName(), lineNumber);
-
-                    //entries.add(msgId);
-
-                    /*if (msgId1 != null && !msgId1.isEmpty()) {
-                        entries.add(msgId1);
-                    }*/
                 } else {
                     //its another class, which ends with "I.", like "MyExampleClassI."
                     continue;

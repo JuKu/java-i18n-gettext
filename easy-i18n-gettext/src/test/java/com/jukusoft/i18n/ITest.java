@@ -3,6 +3,7 @@ package com.jukusoft.i18n;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,6 +31,8 @@ public class ITest {
 
     @Test
     public void testTrWithoutTranslation () {
+        I.init(new File("../testdata/po/"), Locale.ENGLISH, "messages");
+
         String[] testStrings = new String[]{
                 "test",
                 "test 1",

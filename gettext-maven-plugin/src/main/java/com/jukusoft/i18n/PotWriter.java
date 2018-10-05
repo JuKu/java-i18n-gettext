@@ -6,6 +6,7 @@ import org.apache.maven.plugin.logging.Log;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +24,13 @@ public class PotWriter {
         }
 
         //delete file, if exists
-        if (file.exists() && !file.delete()) {
-            throw new MojoFailureException("Cannot delete pot file: " + file.getAbsolutePath());
+        if (file.exists()) {
+            try {
+                Files.delete(file.toPath());
+            } catch (IOException e) {
+                log.error(e);
+                throw new MojoFailureException("Cannot delete pot file: " + file.getAbsolutePath());
+            }
         }
 
         try {

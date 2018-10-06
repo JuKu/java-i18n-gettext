@@ -101,6 +101,11 @@ public class ITest {
         assertEquals(true, I.isDomainLoaded("messages", Locale.ENGLISH));
 
         //this line should remove the domain bundle
+        I.optimizeMemory(10000);
+
+        assertEquals(true, I.isDomainLoaded("messages", Locale.ENGLISH));
+
+        //this line should remove the domain bundle
         I.optimizeMemory(0);
 
         assertEquals(false, I.isDomainLoaded("messages", Locale.ENGLISH));

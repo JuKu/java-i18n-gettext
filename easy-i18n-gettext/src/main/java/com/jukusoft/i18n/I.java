@@ -170,8 +170,6 @@ public class I {
     public static void optimizeMemory (long minUnusedTimeInMs) {
         final long currentTime = System.currentTimeMillis();
 
-        List<String> keysToRemove = new ArrayList<>();
-
         for (Map.Entry<String,DomainBundle> entry : cache.entrySet()) {
             if (entry.getValue().getLastAccessTimestamp() + minUnusedTimeInMs <= currentTime) {
                 //remove domain bundle from memory

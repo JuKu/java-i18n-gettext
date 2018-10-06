@@ -26,7 +26,7 @@ public class I {
     protected static String defaultDomain = "";
 
     //map with domains
-    protected static final Map<CacheKey,DomainBundle> cache = new ConcurrentHashMap<>(DEFAULT_EXPECTED_BUNDLES);
+    protected static final Map<String,DomainBundle> cache = new ConcurrentHashMap<>(DEFAULT_EXPECTED_BUNDLES);
 
     protected static ILoader loader = new PoILoader();
 
@@ -75,15 +75,15 @@ public class I {
     }
 
     public static void loadDomain (String domain, Locale locale) throws NoLangDomainFoundException {
-        cache.put(new CacheKey(domain, locale), loader.load(langFolder, domain, locale));
+        cache.put(getCacheKey(domain, locale), loader.load(langFolder, domain, locale));
     }
 
     public static void unloadDomain (String domain, Locale locale) {
-        cache.remove(new CacheKey(domain, locale));
+        cache.remove(getCacheKey(domain, locale));
     }
 
     public static boolean isDomainLoaded (String domain, Locale locale) {
-        return cache.containsKey(new CacheKey(domain, locale));
+        return cache.containsKey(getCacheKey(domain, locale));
     }
 
     protected static void loadDomainIfNeccessary (String domain, Locale locale) throws NoLangDomainFoundException {
@@ -119,11 +119,11 @@ public class I {
             System.err.println("Coulnd't find translations for domain '" + domainName + "' in language '" + getLanguage() + "'!");
 
             //create dummy domain bundle
-            cache.put(new CacheKey(domainName, getLanguage()), new DomainBundle());
+            cache.put(getCacheKey(domainName, getLanguage()), new DomainBundle());
         }
 
         //get bundle
-        DomainBundle bundle = cache.get(new CacheKey(domainName, getLanguage()));
+        DomainBundle bundle = cache.get(getCacheKey(domainName, getLanguage()));
 
         return bundle.tr(msgId);
     }
@@ -153,6 +153,10 @@ public class I {
      */
     public static String ntr (String domainName, String msgId, String msgIdPlural, long n) {
         return (n > 1 ? tr(domainName, msgIdPlural) : tr(domainName, msgId));
+    }
+
+    protected static String getCacheKey (String domain, Locale locale) {
+        return domain + "_" + locale.getLanguage();
     }
 
 }

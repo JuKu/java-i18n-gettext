@@ -7,6 +7,10 @@ public class DomainBundle {
 
     protected Map<String,String> cache = new ConcurrentHashMap<>();
 
+    //save last access, so memory manager can unload this bundle, if it isn't used anymore (for a while)
+    protected long lastAccess = 0;
+    protected int useCounter = 0;
+
     public DomainBundle () {
         //
     }
@@ -22,7 +26,21 @@ public class DomainBundle {
             return msgId;
         }
 
+        //save current (last access) timestamp
+        this.lastAccess = System.currentTimeMillis();
+
+        //increment counter (to check, if bundle was used in-game - for optimization issues)
+        this.useCounter++;
+
         return translation;
+    }
+
+    public long getLastAccessTimestamp () {
+        return this.lastAccess;
+    }
+
+    public int getUseCounter() {
+        return this.useCounter;
     }
 
 }

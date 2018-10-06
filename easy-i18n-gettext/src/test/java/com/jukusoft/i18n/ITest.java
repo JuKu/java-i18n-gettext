@@ -67,6 +67,14 @@ public class ITest {
         assertEquals("singular string", I.tr("sg1"));
         assertEquals("singular string", I.ntr("sg1", "pl1", 1));
         assertEquals("plural string", I.ntr("sg1", "pl1", 2));
+
+        //unload domain
+        I.unloadDomain("messages", Locale.ENGLISH);
+
+        //should reload domain again, because it is used
+        assertEquals("singular string", I.tr("sg1"));
+        assertEquals("singular string", I.ntr("sg1", "pl1", 1));
+        assertEquals("plural string", I.ntr("sg1", "pl1", 2));
     }
 
     @Test
@@ -76,6 +84,9 @@ public class ITest {
         //this line should't throw an exception, instead msgId should be returned
         I.loadDomain("messages", Locale.CANADA);
         assertEquals("sg1", I.tr("sg1"));
+
+        //unload domain
+        I.unloadDomain("messages", Locale.CANADA);
     }
 
 }

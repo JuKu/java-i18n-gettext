@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: java-i18n-gettext\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: file TestClass.java line 9
+msgid "my-string"
+msgstr "my string"
+
+#: file TestClass.java line 11
+#: file TestClass.java line 10
+msgid "duplicate-string"
+msgstr "duplicate string"
+
+#: file TestClass.java line 15
+msgid "sg1"
+msgid_plural "pl1"
+msgstr[0] "singular string"
+msgstr[1] "plural string"
+

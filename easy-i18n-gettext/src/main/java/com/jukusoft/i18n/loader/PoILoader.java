@@ -13,6 +13,8 @@ public class PoILoader implements ILoader {
             throw new NoLangDomainFoundException("Cannot found .po file for domain '" + domain + "' in language '" + locale.getLanguage() + "'! Search path: " + poFilePath);
         }
 
+        //TODO: load PO file
+
         return new DomainBundle();
     }
 

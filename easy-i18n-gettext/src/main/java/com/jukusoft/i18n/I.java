@@ -146,7 +146,7 @@ public class I {
      * @return translated string
      */
     public static String ntr (String domainName, String msgId, String msgIdPlural, long n) {
-        return (n > 1 ? tr(msgIdPlural) : tr(msgId));
+        return (n > 1 ? tr(domainName, msgIdPlural) : tr(domainName, msgId));
     }
 
 }

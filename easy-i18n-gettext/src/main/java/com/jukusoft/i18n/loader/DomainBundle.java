@@ -11,6 +11,10 @@ public class DomainBundle {
         //
     }
 
+    public void addTranslation (String key, String value) {
+        this.cache.put(key, value);
+    }
+
     public String tr (String msgId) {
         String translation = cache.get(msgId);
 

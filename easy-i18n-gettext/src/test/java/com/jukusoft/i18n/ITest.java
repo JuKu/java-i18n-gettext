@@ -66,7 +66,7 @@ public class ITest {
 
         assertEquals("singular string", I.tr("sg1"));
         assertEquals("singular string", I.ntr("sg1", "pl1", 1));
-        assertEquals("plural string", I.ntr("sg1", "pl1", 1));
+        assertEquals("plural string", I.ntr("sg1", "pl1", 2));
     }
 
     @Test

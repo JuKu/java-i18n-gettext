@@ -1,7 +1,10 @@
 package com.jukusoft.i18n.loader;
 
+import com.jukusoft.i18n.utils.StringUtils;
+
 import java.io.File;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PoILoader implements ILoader {
 
@@ -9,6 +12,11 @@ public class PoILoader implements ILoader {
 
     @Override
     public DomainBundle load(File langFolder, String domain, Locale locale) throws NoLangDomainFoundException {
+        Objects.requireNonNull(langFolder);
+        Objects.requireNonNull(locale);
+
+        StringUtils.requireNotEmpty(domain);
+
         String poFilePath = langFolder.getAbsolutePath() + FILE_SLASH + locale.getLanguage() + FILE_SLASH + domain + ".po";
 
         if (!new File(poFilePath).exists()) {

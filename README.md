@@ -94,6 +94,7 @@ I have written a maven plugin for this:
         <!-- default domain and also the default pot file name (messages --> messages.pot) -->
         <defaultDomain>messages</defaultDomain>
     
+        <!-- information for header in .pot files -->
         <header>
             <!-- your project title, which is written into every generated .pot file -->
             <title>My test project</title>

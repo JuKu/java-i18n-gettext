@@ -4,6 +4,7 @@ import com.jukusoft.i18n.loader.DomainBundle;
 import com.jukusoft.i18n.loader.ILoader;
 import com.jukusoft.i18n.loader.NoLangDomainFoundException;
 import com.jukusoft.i18n.loader.PoILoader;
+import com.jukusoft.i18n.utils.IsoUtils;
 import com.jukusoft.i18n.utils.StringUtils;
 
 import java.io.File;
@@ -57,6 +58,11 @@ public class I {
 
     public static void setLanguage (String langToken) {
         StringUtils.requireNotEmpty(langToken, "language token");
+
+        if (!IsoUtils.isValidISOLanguage(langToken)) {
+            throw new IllegalArgumentException("language token isn't valide ISO language: " + langToken);
+        }
+
         setLanguage(Locale.forLanguageTag(langToken));
     }
 

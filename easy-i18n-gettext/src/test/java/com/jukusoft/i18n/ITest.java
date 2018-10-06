@@ -47,4 +47,15 @@ public class ITest {
         }
     }
 
+    @Test
+    public void testSetLanguage () {
+        I.setLanguage("de");
+        I.setLanguage("en");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testSetLanguage1 () {
+        I.setLanguage("german");
+    }
+
 }

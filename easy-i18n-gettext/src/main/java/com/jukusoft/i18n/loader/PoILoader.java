@@ -25,13 +25,19 @@ public class PoILoader implements ILoader {
 
         DomainBundle bundle = new DomainBundle();
 
+        //load PO file
+        this.readDomainFile(new File(poFilePath), bundle, domain, locale);
+
+        return bundle;
+    }
+
+    protected void readDomainFile (File file, DomainBundle bundle, String domain, Locale locale) throws NoLangDomainFoundException {
         String msgId = "";
         String pluralMsgId = "";
         String msgIdValue = "";
         String pluralMsgIdValue = "";
 
-        //load PO file
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(poFilePath)))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // process the line.
@@ -78,10 +84,8 @@ public class PoILoader implements ILoader {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new NoLangDomainFoundException("Cannot load .po file for domain '" + domain + "' in language '" + locale.getLanguage() + "'! Search path: " + poFilePath + ", exception: " + e.getLocalizedMessage());
+            throw new NoLangDomainFoundException("Cannot load .po file for domain '" + domain + "' in language '" + locale.getLanguage() + "'! Search path: " + file.getAbsolutePath() + ", exception: " + e.getLocalizedMessage());
         }
-
-        return bundle;
     }
 
 }

@@ -87,8 +87,23 @@ public class ITest {
         //should return msgId, because no translation for CANADA exists
         assertEquals("sg1", I.tr("sg1"));
 
+        I.optimizeMemory(10000);
+
         //unload domain
         I.unloadDomain("messages", Locale.CANADA);
+    }
+
+    @Test
+    public void testOptimizeMemory () throws NoLangDomainFoundException {
+        I.init(new File("../testdata/po/"), Locale.ENGLISH, "messages");
+        I.loadDomain("messages", Locale.ENGLISH);
+
+        assertEquals(true, I.isDomainLoaded("messages", Locale.ENGLISH));
+
+        //this line should remove the domain bundle
+        I.optimizeMemory(0);
+
+        assertEquals(false, I.isDomainLoaded("messages", Locale.ENGLISH));
     }
 
 }

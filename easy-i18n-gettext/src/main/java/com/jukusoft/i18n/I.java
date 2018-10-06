@@ -8,6 +8,8 @@ import com.jukusoft.i18n.utils.IsoUtils;
 import com.jukusoft.i18n.utils.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -127,8 +129,6 @@ public class I {
             cache.put(getCacheKey(domainName, getLanguage()), new DomainBundle());
         }
 
-        System.err.println("get string '" + msgId + "' from cache key: " + getCacheKey(domainName, getLanguage()));
-
         //get bundle
         DomainBundle bundle = cache.get(getCacheKey(domainName, getLanguage()));
 
@@ -160,6 +160,26 @@ public class I {
      */
     public static String ntr (String domainName, String msgId, String msgIdPlural, long n) {
         return (n > 1 ? tr(domainName, msgIdPlural) : tr(domainName, msgId));
+    }
+
+    /**
+    * remove domain bundles, which wasn't used a while anymore
+     *
+     * @param minUnusedTimeInMs time in milliseconds on which domain bundle hasnt' to be used to be unloaded yet
+    */
+    public static void optimizeMemory (long minUnusedTimeInMs) {
+        final long currentTime = System.currentTimeMillis();
+
+        List<String> keysToRemove = new ArrayList<>();
+
+        for (Map.Entry<String,DomainBundle> entry : cache.entrySet()) {
+            if (entry.getValue().getLastAccessTimestamp() + minUnusedTimeInMs <= currentTime) {
+                //remove domain bundle from memory
+                System.err.println("[Optimization] remove domain bundle from memory cache: " + entry.getKey());
+
+                cache.remove(entry.getKey());
+            }
+        }
     }
 
     protected static String getCacheKey (String domain, Locale locale) {

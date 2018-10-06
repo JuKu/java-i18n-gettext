@@ -83,6 +83,8 @@ public class ITest {
 
         //this line should't throw an exception, instead msgId should be returned
         //I.loadDomain("messages", Locale.CANADA);
+
+        //should return msgId, because no translation for CANADA exists
         assertEquals("sg1", I.tr("sg1"));
 
         //unload domain

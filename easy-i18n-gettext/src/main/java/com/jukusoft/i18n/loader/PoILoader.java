@@ -17,10 +17,10 @@ public class PoILoader implements ILoader {
 
         StringUtils.requireNotEmpty(domain);
 
-        String poFilePath = langFolder.getAbsolutePath() + FILE_SLASH + locale.getLanguage() + FILE_SLASH + domain + ".po";
+        String poFilePath = langFolder.getAbsolutePath() + FILE_SLASH + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry()) + FILE_SLASH + domain + ".po";
 
         if (!new File(poFilePath).exists()) {
-            throw new NoLangDomainFoundException("Cannot found .po file for domain '" + domain + "' in language '" + locale.getLanguage() + "'! Search path: " + poFilePath);
+            throw new NoLangDomainFoundException("Cannot found .po file for domain '" + domain + "' in language '" + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry()) + "'! Search path: " + poFilePath);
         }
 
         DomainBundle bundle = new DomainBundle();

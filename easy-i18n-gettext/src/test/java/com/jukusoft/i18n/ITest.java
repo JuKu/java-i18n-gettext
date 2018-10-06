@@ -79,10 +79,10 @@ public class ITest {
 
     @Test
     public void testLoadDomainNotExists () throws NoLangDomainFoundException {
-        I.init(new File("../testdata/po/"));
+        I.init(new File("../testdata/po/"), Locale.CANADA, "messages");
 
         //this line should't throw an exception, instead msgId should be returned
-        I.loadDomain("messages", Locale.CANADA);
+        //I.loadDomain("messages", Locale.CANADA);
         assertEquals("sg1", I.tr("sg1"));
 
         //unload domain

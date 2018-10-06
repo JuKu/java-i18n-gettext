@@ -52,8 +52,11 @@ public class I {
         }
 
         I.langFolder = langFolder;
-        setLanguage(defaultLang);
+        I.setLanguage(defaultLang);
         I.defaultDomain = defaultDomain;
+
+        //remove old strings from cache
+        cache.clear();
     }
 
     public static void setLanguage (String langToken) {
@@ -75,6 +78,8 @@ public class I {
     }
 
     public static void loadDomain (String domain, Locale locale) throws NoLangDomainFoundException {
+        System.err.println("loadDomain: " + getCacheKey(domain, locale));
+
         cache.put(getCacheKey(domain, locale), loader.load(langFolder, domain, locale));
     }
 
@@ -122,6 +127,8 @@ public class I {
             cache.put(getCacheKey(domainName, getLanguage()), new DomainBundle());
         }
 
+        System.err.println("get string '" + msgId + "' from cache key: " + getCacheKey(domainName, getLanguage()));
+
         //get bundle
         DomainBundle bundle = cache.get(getCacheKey(domainName, getLanguage()));
 
@@ -156,7 +163,7 @@ public class I {
     }
 
     protected static String getCacheKey (String domain, Locale locale) {
-        return domain + "_" + locale.getLanguage();
+        return domain + "_" + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry());
     }
 
 }

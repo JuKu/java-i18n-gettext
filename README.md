@@ -190,7 +190,7 @@ msgstr[1] "pl1"
 
 ## HowTo: extract translation strings from code with multi-module projects
 
-See below, above, but with a little difference, there is a new tag `<srcDirs>...</srcDirs>`:
+See above, but with a little difference, there is a new tag `<srcDirs>...</srcDirs>`:
 
 ```xml
 <plugin>

@@ -54,7 +54,7 @@
 
 					<srcDirs>
 						<dir>${project.build.sourceDirectory}</dir>
-						<dir>target</dir>
+						<!-- <dir>target</dir> -->
 					</srcDirs>
 				</configuration>
 				<executions>

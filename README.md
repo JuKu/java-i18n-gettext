@@ -86,7 +86,7 @@ I have written a maven plugin for this:
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<configuration>
         <!-- output directory, where .pot files should be saved-->
         <outputDir>lang/</outputDir>
@@ -186,6 +186,45 @@ msgstr[1] "pl1"
 ```
 
 **Attention**!: It's important, that this file ends with a blank line, else parser doesn't load last string.
+
+
+## HowTo: extract translation strings from code with multi-module projects
+
+See below, above, but with a little difference, there is a new tag `<srcDirs>...</srcDirs>`:
+
+```xml
+<plugin>
+	<groupId>com.jukusoft</groupId>
+	<artifactId>gettext-maven-plugin</artifactId>
+	<version>1.0.1</version>
+	<configuration>
+		<outputDir>lang/</outputDir>
+		<defaultDomain>messages</defaultDomain>
+
+		<header>
+			<title>My test project</title>
+			<copyright>Copyright (c) 2018 JuKuSoft.com</copyright>
+			<license>This file is distributed under the same license as the ${project.name} package.</license>
+			<author>JuKu my-mail@example.com, 2018.</author>
+			<version>${project.version}</version>
+		</header>
+
+		<srcDirs>
+			<dir>${project.build.sourceDirectory}</dir>
+			<dir>srcDir1</dir>
+			<dir>srcDir2</dir>
+		</srcDirs>
+	</configuration>
+	<executions>
+		<execution>
+			<phase>package</phase>
+			<goals>
+				<goal>generatepot</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>
+```
 
 ## Additional notes
 

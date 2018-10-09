@@ -18,6 +18,8 @@ public class GeneratePotMojo extends AbstractMojo {
 
     /**
     * source directory
+     *
+     * @deprecated since 1.0.1
     */
     @Deprecated
     @Parameter( property = "generatepot.src", defaultValue = "${project.build.sourceDirectory}" )
@@ -59,16 +61,6 @@ public class GeneratePotMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        //check, if source directory exists
-        /*if (!new File(srcDir).exists()) {
-            throw new MojoFailureException("generatepot source directory '" + new File(srcDir).getAbsolutePath() + "' doesnt exists!");
-        }
-
-        //check, if it is a directory
-        if (!new File(srcDir).isDirectory()) {
-            throw new MojoFailureException("generatepot srcDir '" + new File(srcDir).getAbsolutePath() + "' isn't a directory!");
-        }*/
-
         if (!outputDir.endsWith("/")) {
             throw new MojoFailureException("configuration outputDir has to end with '/'! Current value: '" + outputDir + "'.");
         }
@@ -98,14 +90,6 @@ public class GeneratePotMojo extends AbstractMojo {
             throw new MojoFailureException("langDir isn't a directory: " + new File(langDir).getAbsolutePath());
         }
 
-        getLog().info("Analyze source directory '" + Paths.get(srcDir) + "' now...");
-
-        if (new File(srcDir).listFiles().length == 0) {
-            throw new MojoFailureException("source directory '" + new File(srcDir).getAbsolutePath() + "' is empty!");
-        }
-
-        getLog().info("generatepot source directory: " + new File(srcDir).getAbsolutePath());
-
         Map<String,List<PotEntry>> entriesMap = new HashMap<>();
 
         if (srcDir != null && !srcDir.isEmpty()) {
@@ -125,6 +109,10 @@ public class GeneratePotMojo extends AbstractMojo {
                 //check, if it is a directory
                 if (!new File(dirPath).isDirectory()) {
                     throw new MojoFailureException("generatepot srcDir '" + new File(dirPath).getAbsolutePath() + "' isn't a directory!");
+                }
+
+                if (new File(dirPath).listFiles().length == 0) {
+                    throw new MojoFailureException("source directory '" + new File(dirPath).getAbsolutePath() + "' is empty!");
                 }
 
                 //parse source files

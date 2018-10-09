@@ -27,7 +27,7 @@ See also:
 <dependency>
   <groupId>com.jukusoft</groupId>
   <artifactId>easy-i18n-gettext</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -86,7 +86,7 @@ I have written a maven plugin for this:
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<configuration>
         <!-- output directory, where .pot files should be saved-->
         <outputDir>lang/</outputDir>
@@ -196,7 +196,7 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<configuration>
 		<outputDir>lang/</outputDir>
 		<defaultDomain>messages</defaultDomain>
@@ -254,6 +254,10 @@ System.out.println(translatedString);
           * other-domain.po
 
 ## Changelog
+
+### 1.0.2 (Hotfix)
+
+  - BUGFIX: if deprecated srcDir wasn't set and a maven multi-module project was used, an exception was thrown if the project source directory was empty
 
 ### 1.0.1
 

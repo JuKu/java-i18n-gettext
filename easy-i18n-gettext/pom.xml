@@ -50,7 +50,7 @@
 						<version>${project.version}</version>
 					</header>
 
-					<createCompletePot>true</createCompletePot>
+					<createCompletePotFile>true</createCompletePotFile>
 
 					<srcDirs>
 						<dir>${project.build.sourceDirectory}</dir>

@@ -56,7 +56,7 @@ public class GeneratePotMojo extends AbstractMojo {
     //@Parameter
     private Map<String,String> header;
 
-    @Parameter(property = "generatepot.createCompletePot", defaultValue = "false")
+    @Parameter(/*property = "generatepot.createCompletePot", */defaultValue = "false")
     private boolean createCompletePotFile;
 
     @Override
@@ -158,6 +158,8 @@ public class GeneratePotMojo extends AbstractMojo {
         if (this.createCompletePotFile) {
             getLog().info("create complete pot file with all strings now.");
             PotWriter.write(new File(outputDir + "complete-list.pot"), getLog(), header, new ArrayList<>(fullList));
+        } else {
+            getLog().info("Don't create complete pot file, because it isn't configured.");
         }
     }
 

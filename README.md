@@ -253,6 +253,22 @@ System.out.println(translatedString);
           * menu.po
           * other-domain.po
 
+## Changelog
+
+### 1.0.1
+
+  - added support for maven multi-module projects
+
+### 1.0.0
+
+  - translate single strings
+  - translate single strings with given domain
+  - translate singular / plural (with given number)
+  - translate singular / plural with specified domain
+  - use more than one .po files (i think this isn't possible in [awkay/easy-i18n](https://github.com/awkay/easy-i18n))
+  - memory management (if a domain bundle isn't used a longer time, you can remove them automatically, e.q. if you call `I.optimizeMemory(300000)` it will remove all domain bundles which wasn't used for 300000ms, this means for 5 minutes)
+  - automatically loading of domain bundles, if domain bundle doesn't exists in memory cache
+
 ## Features
 
   - translate single strings
@@ -261,4 +277,5 @@ System.out.println(translatedString);
   - translate singular / plural with specified domain
   - use more than one .po files (i think this isn't possible in [awkay/easy-i18n](https://github.com/awkay/easy-i18n))
   - memory management (if a domain bundle isn't used a longer time, you can remove them automatically, e.q. if you call `I.optimizeMemory(300000)` it will remove all domain bundles which wasn't used for 300000ms, this means for 5 minutes)
+  - support for maven multi-module projects
   - automatically loading of domain bundles, if domain bundle doesn't exists in memory cache

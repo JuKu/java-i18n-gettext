@@ -19,8 +19,15 @@ public class GeneratePotMojo extends AbstractMojo {
     /**
     * source directory
     */
+    @Deprecated
     @Parameter( property = "generatepot.src", defaultValue = "${project.build.sourceDirectory}" )
     private String srcDir;
+
+    /**
+     * source directories list
+     */
+    @Parameter
+    private List<String> srcDirs;
 
     /**
      * pot file output directory
@@ -53,14 +60,14 @@ public class GeneratePotMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         //check, if source directory exists
-        if (!new File(srcDir).exists()) {
+        /*if (!new File(srcDir).exists()) {
             throw new MojoFailureException("generatepot source directory '" + new File(srcDir).getAbsolutePath() + "' doesnt exists!");
         }
 
         //check, if it is a directory
         if (!new File(srcDir).isDirectory()) {
             throw new MojoFailureException("generatepot srcDir '" + new File(srcDir).getAbsolutePath() + "' isn't a directory!");
-        }
+        }*/
 
         if (!outputDir.endsWith("/")) {
             throw new MojoFailureException("configuration outputDir has to end with '/'! Current value: '" + outputDir + "'.");
@@ -101,18 +108,37 @@ public class GeneratePotMojo extends AbstractMojo {
 
         Map<String,List<PotEntry>> entriesMap = new HashMap<>();
 
+        if (srcDir != null && !srcDir.isEmpty()) {
+            srcDirs.add(srcDir);
+        }
+
         try {
-            //parse source files
-            Files.find(Paths.get(srcDir),
-                    Integer.MAX_VALUE,
-                    (filePath, fileAttr) -> fileAttr.isRegularFile())
-                    .forEach(path -> {
-                        try {
-                            analyzeFile(path, defaultDomain, entriesMap);
-                        } catch (MojoFailureException e) {
-                            throw new IllegalStateException("Error while analyzing file '" + path.toFile().getAbsolutePath() + "'!");
-                        }
-                    });
+            //iterate through additional source directory lists
+            for (String dirPath : srcDirs) {
+                getLog().info("Analyze source directory: " + new File(dirPath).getAbsolutePath());
+
+                //check, if source directory exists
+                if (!new File(dirPath).exists()) {
+                    throw new MojoFailureException("generatepot source directory '" + new File(dirPath).getAbsolutePath() + "' doesnt exists!");
+                }
+
+                //check, if it is a directory
+                if (!new File(dirPath).isDirectory()) {
+                    throw new MojoFailureException("generatepot srcDir '" + new File(dirPath).getAbsolutePath() + "' isn't a directory!");
+                }
+
+                //parse source files
+                Files.find(Paths.get(dirPath),
+                        Integer.MAX_VALUE,
+                        (filePath, fileAttr) -> fileAttr.isRegularFile())
+                        .forEach(path -> {
+                            try {
+                                analyzeFile(path, defaultDomain, entriesMap);
+                            } catch (MojoFailureException e) {
+                                throw new IllegalStateException("Error while analyzing file '" + path.toFile().getAbsolutePath() + "'!");
+                            }
+                        });
+            }
         } catch (IOException e) {
             getLog().error("IOException while find files");
             getLog().error(e);

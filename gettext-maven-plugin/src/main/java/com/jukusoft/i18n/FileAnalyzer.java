@@ -20,11 +20,11 @@ public class FileAnalyzer {
     }
     
     public static void analyzeFile (File file, Log log, String defaultDomain, Map<String,List<PotEntry>> entriesMap) throws MojoFailureException {
-        log.info("analyze file: " + file.getAbsolutePath());
+        log.debug("analyze file: " + file.getAbsolutePath());
 
         //dont analyze class I itself
         if (file.getAbsolutePath().endsWith("I.java")) {
-            log.info("skip class I.java: " + file.getAbsolutePath());
+            log.debug("skip class I.java: " + file.getAbsolutePath());
             return;
         }
 
@@ -40,11 +40,11 @@ public class FileAnalyzer {
 
         //check, if class I is used
         if (!content.contains("I.")) {
-            log.info("skip file '" + file.getAbsolutePath() + "', because this class doesn't uses class I.");
+            log.debug("skip file '" + file.getAbsolutePath() + "', because this class doesn't uses class I.");
             return;
         }
 
-        log.info("java file '" + file.getAbsolutePath() + "' contains class I.");
+        log.debug("java file '" + file.getAbsolutePath() + "' contains class I.");
 
         //iterate through lines
         String[] lines = content.split(System.lineSeparator());
@@ -155,7 +155,7 @@ public class FileAnalyzer {
                     PotEntry entry = new PotEntry(domainName, msgId, msgId1);
 
                     if (entries.contains(entry)) {
-                        log.info("key " + domainName + "." + msgId + " already exists in map!");
+                        //log.info("key " + domainName + "." + msgId + " already exists in map!");
                         entry = entries.get(entries.indexOf(entry));
                     } else {
                         entries.add(entry);

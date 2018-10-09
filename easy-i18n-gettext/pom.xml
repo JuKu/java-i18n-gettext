@@ -51,6 +51,11 @@
 					</header>
 
 					<createCompletePot>true</createCompletePot>
+
+					<srcDirs>
+						<dir>${project.build.sourceDirectory}</dir>
+						<dir>target</dir>
+					</srcDirs>
 				</configuration>
 				<executions>
 					<execution>

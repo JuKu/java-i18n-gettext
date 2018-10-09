@@ -155,7 +155,6 @@ public class FileAnalyzer {
                     PotEntry entry = new PotEntry(domainName, msgId, msgId1);
 
                     if (entries.contains(entry)) {
-                        //log.info("key " + domainName + "." + msgId + " already exists in map!");
                         entry = entries.get(entries.indexOf(entry));
                     } else {
                         entries.add(entry);

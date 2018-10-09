@@ -22,7 +22,7 @@ public class GeneratePotMojo extends AbstractMojo {
      * @deprecated since 1.0.1
     */
     @Deprecated
-    @Parameter( property = "generatepot.src", defaultValue = "${project.build.sourceDirectory}" )
+    @Parameter( property = "generatepot.src", defaultValue = "" )
     private String srcDir;
 
     /**

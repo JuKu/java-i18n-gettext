@@ -128,7 +128,7 @@ public class GeneratePotMojo extends AbstractMojo {
                         Integer.MAX_VALUE,
                         (filePath, fileAttr) -> fileAttr.isRegularFile())
                         .forEach(path -> {
-                            getLog().debug("Analyze file: " + path);
+                            getLog().info("Analyze file: " + path);
 
                             try {
                                 analyzeFile(path, defaultDomain, entriesMap);

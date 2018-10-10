@@ -56,6 +56,11 @@ public class FileAnalyzer {
 
             while (true) {
                 if (line.contains("I.")) {
+                    if (line.contains("I.init")) {
+                        //dont analyze lines with I.init() method call
+                        break;
+                    }
+
                     char[] c = line.toCharArray();
 
                     int pos = line.indexOf("I.");

@@ -66,6 +66,7 @@ public class GeneratePotMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().info("Skip generatePotFile in this module, because ${i18n.gettext.skip.modules} or configuration 'skip' is set to true.");
+            return;
         }
 
         if (!outputDir.endsWith("/")) {

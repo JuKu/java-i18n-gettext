@@ -55,6 +55,9 @@ public class PotWriter {
         headerMap.putIfAbsent("defaultLang", "en");
         headerMap.putIfAbsent("charset", "UTF-8");
 
+        //options
+        headerMap.putIfAbsent("option.addPoCreationDate", "false");
+
         try (FileWriter writer = new FileWriter(file)) {
             //first, writer header
             writer.write("# " + headerMap.get("title") + "\n");
@@ -68,7 +71,7 @@ public class PotWriter {
             writer.write("#, fuzzy\n");
             writer.write("msgid \"\"\n");
             writer.write("msgstr \"\"\n");
-            writer.write("\"Project-Id-Version: PACKAGE VERSION\\n\"\n");
+            writer.write("\"Project-Id-Version: " + headerMap.get("version") + "\\n\"\n");
 
             if (!headerMap.get("bugReportUrl").isEmpty()) {
                 writer.write("\"Report-Msgid-Bugs-To: " + headerMap.get("bugReportUrl") + "\\n\"\n");
@@ -76,7 +79,10 @@ public class PotWriter {
 
             SimpleDateFormat sdf = new SimpleDateFormat("dyyyy-MM-dd HH:mm:SS");
 
-            writer.write("\"POT-Creation-Date: " + sdf.format(new Date()) + "+0100\\n\"\n");
+            if (Boolean.parseBoolean(headerMap.get("option.addPoCreationDate"))) {
+                writer.write("\"POT-Creation-Date: " + sdf.format(new Date()) + "+0100\\n\"\n");
+            }
+
             writer.write("\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n");
             writer.write("\"Last-Translator: Auto generated file\\n\"\n");
 

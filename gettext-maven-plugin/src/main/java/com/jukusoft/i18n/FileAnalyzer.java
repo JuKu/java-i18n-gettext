@@ -54,120 +54,126 @@ public class FileAnalyzer {
         for (String line : lines) {
             lineNumber++;
 
-            if (line.contains("I.")) {
-                char[] c = line.toCharArray();
+            while (true) {
+                if (line.contains("I.")) {
+                    char[] c = line.toCharArray();
 
-                int pos = line.indexOf("I.");
+                    int pos = line.indexOf("I.");
+                    int pos1 = 0;
 
-                int argumentsPos = 0;
+                    int argumentsPos = 0;
 
-                //check character before I.
-                if (c[pos - 1] == ' ' || c[pos - 1] == '(') {
-                    //its the right class
-                    StringBuilder sb = new StringBuilder();
-                    String methodName = null;
+                    //check character before I.
+                    if (c[pos - 1] == ' ' || c[pos - 1] == '(') {
+                        //its the right class
+                        StringBuilder sb = new StringBuilder();
+                        String methodName = null;
 
-                    //iterate through '(' is found
-                    for (int i = pos + 2; i < c.length; i++) {
-                        if (c[i] == '(') {
-                            //end of method name
-                            methodName = sb.toString();
+                        //iterate through '(' is found
+                        for (int i = pos + 2; i < c.length; i++) {
+                            if (c[i] == '(') {
+                                //end of method name
+                                methodName = sb.toString();
 
-                            argumentsPos = i + 1;
+                                argumentsPos = i + 1;
 
-                            break;
+                                break;
+                            }
+
+                            sb.append(c[i]);
                         }
 
-                        sb.append(c[i]);
-                    }
+                        if (!isAllowedMethod(methodName)) {
+                            //its a method like I.init()
+                            continue;
+                        }
 
-                    if (!isAllowedMethod(methodName)) {
-                        //its a method like I.init()
+                        StringBuilder sb1 = new StringBuilder();
+
+                        //get arguments
+                        for (int i = argumentsPos; i < line.length(); i++) {
+                            if (c[i] == ')') {
+                                pos1 = i;
+                                break;
+                            }
+
+                            sb1.append(c[i]);
+                        }
+
+                        //get string and remove quotes
+                        String argumentsStr = sb1.toString().replace("\"", "");
+
+                        //split arguments in single arguments
+                        String[] arguments = argumentsStr.split(", ");
+
+                        String domainName = defaultDomain;
+                        String msgId = "";
+                        String msgId1 = "";
+
+                        switch (methodName) {
+                            case "tr":
+                                //requires 1 or 2 arguments
+                                if (arguments.length == 1) {
+                                    //its only the msgId
+                                    msgId = arguments[0];
+                                } else if (arguments.length == 2) {
+                                    //its the domain name and the msgId
+                                    msgId = arguments[1];
+                                    domainName = arguments[0];
+                                } else {
+                                    log.warn("Unexpected argument in file " + file.getAbsolutePath() + " in method I." + methodName + "()!");
+                                }
+
+                                break;
+
+                            case "ntr":
+                                //requires 3 arguments
+                                if (arguments.length < 3 || arguments.length > 4) {
+                                    log.warn("Unexpected argument list, 3 or 4 arguments required in file " + file.getAbsolutePath() + " in method I." + methodName + "()! Line: " + line);
+                                }
+
+                                if (arguments.length == 3) {
+                                    msgId = arguments[0];
+                                    msgId1 = arguments[1];
+                                } else {
+                                    //4 arguments, with domain name
+                                    domainName = arguments[0];
+                                    msgId = arguments[1];
+                                    msgId1 = arguments[2];
+                                }
+
+                                break;
+
+                            default:
+                                throw new MojoFailureException("Invalide method name of class I: " + methodName);
+                        }
+
+                        if (!entriesMap.containsKey(domainName)) {
+                            entriesMap.put(domainName, new ArrayList<>());
+                        }
+
+                        //get domain list
+                        List<PotEntry> entries = entriesMap.get(domainName);
+
+                        PotEntry entry = new PotEntry(domainName, msgId, msgId1);
+
+                        if (entries.contains(entry)) {
+                            entry = entries.get(entries.indexOf(entry));
+                        } else {
+                            entries.add(entry);
+                        }
+
+                        entry.addFile(file.getName(), lineNumber);
+                    } else {
+                        //its another class, which ends with "I.", like "MyExampleClassI."
                         continue;
                     }
 
-                    StringBuilder sb1 = new StringBuilder();
-
-                    //get arguments
-                    for (int i = argumentsPos; i < line.length(); i++) {
-                        if (c[i] == ')') {
-                            break;
-                        }
-
-                        sb1.append(c[i]);
-                    }
-
-                    //get string and remove quotes
-                    String argumentsStr = sb1.toString().replace("\"", "");
-
-                    //split arguments in single arguments
-                    String[] arguments = argumentsStr.split(", ");
-
-                    String domainName = defaultDomain;
-                    String msgId = "";
-                    String msgId1 = "";
-
-                    switch (methodName) {
-                        case "tr":
-                            //requires 1 or 2 arguments
-                            if (arguments.length == 1) {
-                                //its only the msgId
-                                msgId = arguments[0];
-                            } else if (arguments.length == 2) {
-                                //its the domain name and the msgId
-                                msgId = arguments[1];
-                                domainName = arguments[0];
-                            } else {
-                                log.warn("Unexpected argument in file " + file.getAbsolutePath() + " in method I." + methodName + "()!");
-                            }
-
-                            break;
-
-                        case "ntr":
-                            //requires 3 arguments
-                            if (arguments.length < 3 || arguments.length > 4) {
-                                log.warn("Unexpected argument list, 3 or 4 arguments required in file " + file.getAbsolutePath() + " in method I." + methodName + "()! Line: " + line);
-                            }
-
-                            if (arguments.length == 3) {
-                                msgId = arguments[0];
-                                msgId1 = arguments[1];
-                            } else {
-                                //4 arguments, with domain name
-                                domainName = arguments[0];
-                                msgId = arguments[1];
-                                msgId1 = arguments[2];
-                            }
-
-                            break;
-
-                        default:
-                            throw new MojoFailureException("Invalide method name of class I: " + methodName);
-                    }
-
-                    if (!entriesMap.containsKey(domainName)) {
-                        entriesMap.put(domainName, new ArrayList<>());
-                    }
-
-                    //get domain list
-                    List<PotEntry> entries = entriesMap.get(domainName);
-
-                    PotEntry entry = new PotEntry(domainName, msgId, msgId1);
-
-                    if (entries.contains(entry)) {
-                        entry = entries.get(entries.indexOf(entry));
-                    } else {
-                        entries.add(entry);
-                    }
-
-                    entry.addFile(file.getName(), lineNumber);
+                    line = line.substring(pos1 + 1);
                 } else {
-                    //its another class, which ends with "I.", like "MyExampleClassI."
-                    continue;
+                    //line doesn't use class I
+                    break;
                 }
-            } else {
-                //line doesn't use class I
-                continue;
             }
         }
     }

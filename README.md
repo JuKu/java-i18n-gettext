@@ -274,6 +274,7 @@ System.out.println(translatedString);
 ### 1.0.4 (WIP)
 
   - added support for `skip` parameter in configuration
+  - added support to parse multiple uses of `I.tr()` or `I.ntr()` in same line, e.q. `System.out.println(I.tr("key1") + I.tr("key2-in-same-line"));`
 
 ### 1.0.3
 

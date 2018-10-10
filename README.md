@@ -271,7 +271,7 @@ System.out.println(translatedString);
 
 ## Changelog
 
-### 1.0.4 (SNAPSHOT)
+### 1.0.4 (WIP)
 
   - added support `skip` parameter in configuration
 

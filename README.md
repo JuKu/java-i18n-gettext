@@ -226,6 +226,22 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 </plugin>
 ```
 
+**NOTICE**: If you want to execute this plugin only in parent project and not in modules, you can use the plugin skip parameter:
+```xml
+<plugin>
+	<groupId>com.jukusoft</groupId>
+	<artifactId>gettext-maven-plugin</artifactId>
+	<version>1.0.3</version>
+	<configuration>
+		<!-- [...] -->
+		
+		<skip>true</skip>
+	</configuration>
+	
+	<!-- [...] -->
+</plugin>
+```
+
 ## Additional notes
 
 ```java
@@ -254,6 +270,10 @@ System.out.println(translatedString);
           * other-domain.po
 
 ## Changelog
+
+### 1.0.4 (SNAPSHOT)
+
+  - added support `skip` parameter in configuration
 
 ### 1.0.3
 

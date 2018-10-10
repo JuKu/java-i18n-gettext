@@ -27,7 +27,7 @@ See also:
 <dependency>
   <groupId>com.jukusoft</groupId>
   <artifactId>easy-i18n-gettext</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -86,7 +86,7 @@ I have written a maven plugin for this:
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.3</version>
+	<version>1.1.0</version>
 	<configuration>
         <!-- output directory, where .pot files should be saved-->
         <outputDir>lang/</outputDir>
@@ -196,7 +196,7 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.3</version>
+	<version>1.1.0</version>
 	<configuration>
 		<outputDir>lang/</outputDir>
 		<defaultDomain>messages</defaultDomain>
@@ -231,7 +231,7 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.0.3</version>
+	<version>1.1.0</version>
 	<configuration>
 		<!-- [...] -->
 		
@@ -271,7 +271,7 @@ System.out.println(translatedString);
 
 ## Changelog
 
-### 1.1.0 (WIP)
+### 1.1.0
 
   - added support for `skip` parameter in configuration
   - added support to parse multiple uses of `I.tr()` or `I.ntr()` in same line, e.q. `System.out.println(I.tr("key1") + I.tr("key2-in-same-line"));`

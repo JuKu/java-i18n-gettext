@@ -271,11 +271,12 @@ System.out.println(translatedString);
 
 ## Changelog
 
-### 1.0.4 (WIP)
+### 1.1.0 (WIP)
 
   - added support for `skip` parameter in configuration
   - added support to parse multiple uses of `I.tr()` or `I.ntr()` in same line, e.q. `System.out.println(I.tr("key1") + I.tr("key2-in-same-line"));`
-
+  - BUGFIX: fixed some problems with maven gettext plugin, if `I.init()` was in line
+  
 ### 1.0.3
 
   - removed "Po-Creation-Date" from pot header, so versioning is easier. If you want to add this, there is a new optional option for this, write this between header tags `<option.addPoCreationDate>true</option.addPoCreationDate>`. Then it will added again

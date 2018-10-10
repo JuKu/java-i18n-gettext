@@ -85,7 +85,7 @@ public class FileAnalyzer {
 
                         if (!isAllowedMethod(methodName)) {
                             //its a method like I.init()
-                            continue;
+                            break;
                         }
 
                         StringBuilder sb1 = new StringBuilder();

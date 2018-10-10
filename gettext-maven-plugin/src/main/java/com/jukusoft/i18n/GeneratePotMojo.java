@@ -56,11 +56,18 @@ public class GeneratePotMojo extends AbstractMojo {
     //@Parameter
     private Map<String,String> header;
 
+    @Parameter( defaultValue = "${i18n.gettext.skip.modules}")
+    private boolean skip;
+
     @Parameter(/*property = "generatepot.createCompletePot", */defaultValue = "false")
     private boolean createCompletePotFile;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().info("Skip generatePotFile in this module, because ${i18n.gettext.skip.modules} or configuration 'skip' is set to true.");
+        }
+
         if (!outputDir.endsWith("/")) {
             throw new MojoFailureException("configuration outputDir has to end with '/'! Current value: '" + outputDir + "'.");
         }

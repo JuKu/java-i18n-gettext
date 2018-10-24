@@ -105,11 +105,13 @@ public class FileAnalyzer {
                             sb1.append(c[i]);
                         }
 
-                        //get string and remove quotes
-                        String argumentsStr = sb1.toString().replace("\"", "");
-
                         //split arguments in single arguments
-                        String[] arguments = argumentsStr.split(", ");
+                        String[] arguments = sb1.toString().split(", ");
+
+                        //remove quotes in arguments
+                        for (int i = 0; i < arguments.length; i++) {
+                            arguments[i] = arguments[i].replace("\"", "");
+                        }
 
                         String domainName = defaultDomain;
                         String msgId = "";

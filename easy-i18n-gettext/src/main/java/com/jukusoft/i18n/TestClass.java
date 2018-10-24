@@ -16,6 +16,8 @@ public class TestClass {
         String str1 = I.ntr("my-test-domain", "sg2", "pl2", 2);
 
         System.out.println(I.tr("test1") + I.tr("test2-in-same-line"));
+
+        I.tr("this is a string with komma, test.");
     }
 
 }

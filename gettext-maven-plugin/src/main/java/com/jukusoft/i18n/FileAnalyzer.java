@@ -105,12 +105,37 @@ public class FileAnalyzer {
                             sb1.append(c[i]);
                         }
 
-                        //split arguments in single arguments
-                        String[] arguments = sb1.toString().split(", ");
+                        //string with all arguments, e.q. "sg1", "pl1", 2
+                        String argumentsStr = sb1.toString();
+                        char[] cArray = argumentsStr.toCharArray();
 
-                        //remove quotes in arguments
+                        int parenthesesCount = 0;
+
+                        StringBuilder sb2 = new StringBuilder();
+
+                        //we have to replace commas inner parentheses with __KOMMA__, else they were count as extra argument
+                        for (int i = 0; i < cArray.length; i++) {
+                            if (cArray[i] == '"') {
+                                parenthesesCount = (parenthesesCount + 1) % 2;
+                                sb2.append('"');
+                            } else if (cArray[i] == ',') {
+                                //replace comma, if it is inner parentheses
+                                if (parenthesesCount == 1) {
+                                    sb2.append("__KOMMA__");
+                                } else {
+                                    sb2.append(",");
+                                }
+                            } else {
+                                sb2.append(cArray[i]);
+                            }
+                        }
+
+                        //split arguments in single arguments
+                        String[] arguments = sb2.toString().split(", ");
+
+                        //remove quotes in arguments and replace "__KOMMA__" with ","
                         for (int i = 0; i < arguments.length; i++) {
-                            arguments[i] = arguments[i].replace("\"", "");
+                            arguments[i] = arguments[i].replace("\"", "").replace("__KOMMA__", ",");
                         }
 
                         String domainName = defaultDomain;

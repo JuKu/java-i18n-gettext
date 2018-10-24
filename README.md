@@ -27,7 +27,7 @@ See also:
 <dependency>
   <groupId>com.jukusoft</groupId>
   <artifactId>easy-i18n-gettext</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -86,7 +86,7 @@ I have written a maven plugin for this:
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<configuration>
         <!-- output directory, where .pot files should be saved-->
         <outputDir>lang/</outputDir>
@@ -196,7 +196,7 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<configuration>
 		<outputDir>lang/</outputDir>
 		<defaultDomain>messages</defaultDomain>
@@ -231,7 +231,7 @@ See above, but with a little difference, there is a new tag `<srcDirs>...</srcDi
 <plugin>
 	<groupId>com.jukusoft</groupId>
 	<artifactId>gettext-maven-plugin</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<configuration>
 		<!-- [...] -->
 		

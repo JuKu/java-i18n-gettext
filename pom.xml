@@ -7,7 +7,7 @@
 	<groupId>com.jukusoft</groupId>
 	<artifactId>easy-i18n-gettext-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<modules>
 		<module>gettext-maven-plugin</module>
 		<module>easy-i18n-gettext</module>

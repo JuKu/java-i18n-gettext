@@ -1,14 +1,18 @@
 package com.jukusoft.i18n.loader;
 
+import com.jukusoft.i18n.logger.LogUtils;
 import com.jukusoft.i18n.utils.StringUtils;
 
 import java.io.*;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.logging.Level;
 
 public class PoILoader implements ILoader {
 
     protected static final String FILE_SLASH = File.separator;
+    protected static BiConsumer<Level,String> logConsumer;
 
     @Override
     public DomainBundle load(File langFolder, String domain, Locale locale) throws NoLangDomainFoundException {
@@ -18,6 +22,7 @@ public class PoILoader implements ILoader {
         StringUtils.requireNotEmpty(domain);
 
         String poFilePath = langFolder.getAbsolutePath() + FILE_SLASH + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry()) + FILE_SLASH + domain + ".po";
+        LogUtils.log(Level.INFO, "i18n po file path: " + poFilePath);
 
         if (!new File(poFilePath).exists()) {
             throw new NoLangDomainFoundException("Cannot found .po file for domain '" + domain + "' in language '" + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry()) + "'! Search path: " + poFilePath);
@@ -36,6 +41,8 @@ public class PoILoader implements ILoader {
         String pluralMsgId = "";
         String msgIdValue = "";
         String pluralMsgIdValue = "";
+
+        LogUtils.log(Level.INFO, "load .po file: " + file.getAbsolutePath());
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;

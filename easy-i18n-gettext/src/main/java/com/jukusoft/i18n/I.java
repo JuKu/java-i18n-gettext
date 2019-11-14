@@ -4,6 +4,7 @@ import com.jukusoft.i18n.loader.DomainBundle;
 import com.jukusoft.i18n.loader.ILoader;
 import com.jukusoft.i18n.loader.NoLangDomainFoundException;
 import com.jukusoft.i18n.loader.PoILoader;
+import com.jukusoft.i18n.logger.LogUtils;
 import com.jukusoft.i18n.utils.IsoUtils;
 import com.jukusoft.i18n.utils.StringUtils;
 
@@ -11,6 +12,8 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.logging.Level;
 
 public class I {
 
@@ -78,7 +81,7 @@ public class I {
     }
 
     public static void loadDomain (String domain, Locale locale) throws NoLangDomainFoundException {
-        System.err.println("loadDomain: " + getCacheKey(domain, locale));
+        System.err.println("loadDomain: " + getCacheKey(domain, locale) + ", langFolder: " + langFolder.getAbsolutePath());
 
         cache.put(getCacheKey(domain, locale), loader.load(langFolder, domain, locale));
     }
@@ -93,6 +96,8 @@ public class I {
 
     protected static void loadDomainIfNeccessary (String domain, Locale locale) throws NoLangDomainFoundException {
         if (!isDomainLoaded(domain, locale)) {
+            LogUtils.log(Level.FINEST, "domain not available, load domain now: " + domain + ", locale: " + locale.getLanguage());
+
             //load domain
             loadDomain(domain, locale);
         }
@@ -166,6 +171,8 @@ public class I {
      * @param minUnusedTimeInMs time in milliseconds on which domain bundle hasnt' to be used to be unloaded yet
     */
     public static void optimizeMemory (long minUnusedTimeInMs) {
+        LogUtils.log(Level.FINEST, "optimizeMemory()");
+
         final long currentTime = System.currentTimeMillis();
 
         for (Map.Entry<String,DomainBundle> entry : cache.entrySet()) {

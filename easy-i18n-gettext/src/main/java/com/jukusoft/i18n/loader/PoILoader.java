@@ -90,6 +90,17 @@ public class PoILoader implements ILoader {
                     pluralMsgIdValue = line.replace("msgstr[1] ", "").replace("\"", "");
                 }
             }
+
+            //save last value, too
+            //save singular translation
+            if (!msgId.isEmpty() && !msgIdValue.isEmpty()) {
+                bundle.addTranslation(msgId, msgIdValue);
+            }
+
+            //save plural translation
+            if (!pluralMsgId.isEmpty() && !pluralMsgIdValue.isEmpty()) {
+                bundle.addTranslation(pluralMsgId, pluralMsgIdValue);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new NoLangDomainFoundException("Cannot load .po file for domain '" + domain + "' in language '" + locale.getLanguage() + "'! Search path: " + file.getAbsolutePath() + ", exception: " + e.getLocalizedMessage());

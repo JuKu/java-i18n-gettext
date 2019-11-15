@@ -25,6 +25,7 @@ public class PoILoader implements ILoader {
         LogUtils.log(Level.INFO, "i18n po file path: " + poFilePath);
 
         if (!new File(poFilePath).exists()) {
+            System.err.println("po file does not exists: " + new File(poFilePath).getAbsolutePath());
             throw new NoLangDomainFoundException("Cannot found .po file for domain '" + domain + "' in language '" + locale.getLanguage() + (locale.getCountry().isEmpty() ? "" : "_" + locale.getCountry()) + "'! Search path: " + poFilePath);
         }
 

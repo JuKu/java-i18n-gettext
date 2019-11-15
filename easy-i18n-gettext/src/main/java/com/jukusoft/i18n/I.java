@@ -82,6 +82,7 @@ public class I {
 
     public static void loadDomain (String domain, Locale locale) throws NoLangDomainFoundException {
         System.err.println("loadDomain: " + getCacheKey(domain, locale) + ", langFolder: " + langFolder.getAbsolutePath());
+        System.err.println("i18n loader: " + loader.getClass().getCanonicalName());
 
         cache.put(getCacheKey(domain, locale), loader.load(langFolder, domain, locale));
     }

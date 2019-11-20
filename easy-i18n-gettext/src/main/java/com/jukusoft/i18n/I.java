@@ -97,7 +97,7 @@ public class I {
 
     protected static void loadDomainIfNeccessary (String domain, Locale locale) throws NoLangDomainFoundException {
         if (!isDomainLoaded(domain, locale)) {
-            LogUtils.log(Level.FINEST, "domain not available, load domain now: " + domain + ", locale: " + locale.getLanguage());
+            LogUtils.log(Level.FINEST, "domain not in cache, load domain now: " + domain + ", locale: " + locale.getLanguage());
 
             //load domain
             loadDomain(domain, locale);

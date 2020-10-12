@@ -52,7 +52,7 @@
 	</distributionManagement>
 
 	<properties>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 
 		<mockito.version>2.2.7</mockito.version>
 
